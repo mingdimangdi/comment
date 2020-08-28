@@ -37,10 +37,43 @@
 
         <div class="comment">
             <p>댓글</p>
+           <form action = "{% url 'comment_create' ppost.id %}" method ="POST">
+               {% csrf_token %}
+               {{ form.as_p }}
+               <input type ="submit" value ="Write">
+            </form>
+
+           
+
+            {% for comment in comments %}
+            <p>{{comment.author}} {{comment.created|date:"D d M Y"}}</p>
+            <p>{{comment.content}}</p>
+            
+            <a href ="{% url 'comment_delete' ppost.id comment.id %}">삭제하기</a>
+            <a href ="{% url 'comment_update' ppost.id comment.id %}">수정하기</a>
+
+            {% endfor %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    {{ messages.tags }}
+                    {{messages.message}}
+                {% endfor %}
+            {% endif %}
+
         </div>
+
+        
     </div>
 
 </body>
 
-
+<script type="text/javascript">
+    {% if messages %}
+        {% for message in messages %}
+            alert("{{message.message}}");
+        {% endfor %}
+    {% endif %}
+</script>
 </html>
+
